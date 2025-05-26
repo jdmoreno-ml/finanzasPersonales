@@ -1,0 +1,41 @@
+table users{
+  id int [pk, increment] // Primary key with auto-increment
+  name varchar(100) // User's name
+  email varchar(100) [unique] // User's email, must be unique
+  password varchar(255) // User's password, hashed
+  created_at datetime [default: `current_timestamp`] // Timestamp of creation
+  updated_at datetime [default: `current_timestamp`] // Timestamp of last update
+}
+
+table categories{
+  id int [pk, increment] // Primary key with auto-increment
+  name varchar(255) // Category name
+  type enum ('ingreso', 'gasto') // Type of category: income or expense
+  created_at datetime [default: `current_timestamp`] // Timestamp of creation
+  updated_at datetime [default: `current_timestamp`] // Timestamp of last update
+}
+
+table movements{
+  id int [pk, increment] // Primary key with auto-increment
+  user_id int [ref: > users.id] // Foreign key referencing users table
+  category_id int [ref: > categories.id] // Foreign key referencing categories table
+  type enum ('ingreso', 'gasto') // Type of movement: income or expense
+  amount decimal(10, 2) // Amount of the movement
+  description varchar(255) // Description of the movement
+  date datetime // Date of the movement
+  created_at datetime [default: `current_timestamp`] // Timestamp of creation
+  updated_at datetime [default: `current_timestamp`] // Timestamp of last update
+  photo varchar(255) // Path to the photo associated with the movement
+}
+
+table budgets{
+  id int [pk, increment] // Primary key with auto-increment
+  user_id int [ref: > users.id] // Foreign key referencing users table
+  category_id int [ref: > categories.id] // Foreign key referencing categories table
+  amount_assigned decimal(10, 2) // Budgeted amount
+  amount_spent decimal(10, 2) [default: 0.00] // Amount spent, default is 0
+  mounth int // Month of the budget
+  year int // Year of the budget
+  created_at datetime [default: `current_timestamp`] // Timestamp of creation
+  updated_at datetime [default: `current_timestamp`] // Timestamp of last update
+}
